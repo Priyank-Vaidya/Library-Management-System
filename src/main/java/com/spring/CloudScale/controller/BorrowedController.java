@@ -1,7 +1,6 @@
 package com.spring.CloudScale.controller;
 
 import com.spring.CloudScale.model.Borrowed;
-import com.spring.CloudScale.model.Customers;
 import com.spring.CloudScale.model.Library;
 import com.spring.CloudScale.model.dto.borrowedCreationDTO;
 import com.spring.CloudScale.model.dto.borrowedUpdationDTO;
@@ -11,13 +10,11 @@ import com.spring.CloudScale.persistence.LibraryRepository;
 import com.spring.CloudScale.util.DTO;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user/{custid}/borrowed")
+@RequestMapping("/api/user/{user_id}/borrowed")
 public class BorrowedController {
 
     protected BorrowedRepository borrowedRepository;
@@ -28,14 +25,15 @@ public class BorrowedController {
         this.libraryRepository = libraryRepository;
     }
 
-    @PostMapping(value = "/api/v1/{custid}/borrow", params = "bookid")
-    public void newBorrow(@DTO(borrowedCreationDTO.class) Borrowed user, @PathVariable("custid") long custid, @RequestParam("bookid") long bookid, @RequestParam("copies") int copies) {
+    @PostMapping(value = "/api/v1/{user_id}/borrow", params = "book_id")
+    public void newBorrow(@DTO(borrowedCreationDTO.class) Borrowed user, @PathVariable("user_id") long user_id, @RequestParam("book_id") long book_id, @RequestParam("copies") int copies) throws Exception {
         borrowedCreationDTO borrowedCreationDTO = new borrowedCreationDTO();
 
-        List<Borrowed>  borrowedList = borrowedRepository.findAllByUserid(custid);
+        List<Borrowed>  borrowedList = borrowedRepository.findAllByUserid(user_id);
 
-        borrowedCreationDTO.setUserid(custid);
-        borrowedCreationDTO.setBookid(bookid);
+        //Creating the Updation of the
+        borrowedCreationDTO.setUserid(user_id);
+        borrowedCreationDTO.setBookid(book_id);
         borrowedCreationDTO.setCopies(copies);
 
         borrowedRepository.save(user);
@@ -51,19 +49,22 @@ public class BorrowedController {
     }
 
 
-    public void updateLibrary(@DTO(libraryUpdateDTO.class) Library library, int copiesBorrowed) {
+    public void updateLibrary(@DTO(libraryUpdateDTO.class) Library library, int copiesBorrowed) throws Exception {
         libraryUpdateDTO libraryupdatedto = new libraryUpdateDTO();
-        libraryupdatedto.setCopies(libraryupdatedto.getCopies() - copiesBorrowed);
-
-        libraryRepository.save(library);
-
+        if(libraryupdatedto.getCopies() - copiesBorrowed >0) {
+            libraryupdatedto.setCopies(libraryupdatedto.getCopies() - copiesBorrowed);
+            libraryRepository.save(library);
+        }
+        else{
+            throw new Exception("The User cannot Borrow More copy than available");
+        }
         System.out.println("After Borrowing the Library Database has been changed");
 
     }
 }
 
 @RestController
-@RequestMapping(value = "api/v1/user/{userid}/return", params = "bookid")
+@RequestMapping(value = "api/v1/user/{user_id}/return", params = "book_id")
 class returnBorrow extends BorrowedController{
 
     public void updateLibraryafterReturn(@DTO(libraryUpdateDTO.class) Library library, int copiesBorrowed) {
@@ -83,26 +84,26 @@ class returnBorrow extends BorrowedController{
     }
 
     @PostMapping
-    public void returnBook(@DTO(borrowedUpdationDTO.class) Borrowed user, @PathVariable("userid") long userid, @RequestParam("bookid") long bookid){
+    public void returnBook(@DTO(borrowedUpdationDTO.class) Borrowed user, @PathVariable("user_id") long user_id, @RequestParam("book_id") long book_id) throws Exception {
         borrowedUpdationDTO borrowedupdationdto = new borrowedUpdationDTO();
 
 //        Borrowed borrowed = (Borrowed) borrowedRepository.findAllByUserId(userid);
+        Optional<Borrowed> borrowedOptional = borrowedRepository.findById(book_id);
 
-        Optional<Borrowed> borrowedOptional = borrowedRepository.findById(userid);
-        int copies = borrowedOptional.get().getCopies();
-        if(borrowedOptional!=null){
+        //Fetching the List matching the user_id and book_id
+        List<Borrowed> borrowedList = borrowedRepository.findAllByUserIdAndBookId(user_id, book_id);
 
+
+        if(borrowedOptional.isPresent()) {
+            int copies = borrowedOptional.get().getCopies();
 
             borrowedupdationdto.setReturnBy(borrowedupdationdto.getBorrowedAt());
-            borrowedRepository.deleteById(bookid);
+//            borrowedList.stream().
+            borrowedRepository.deleteAll(borrowedList);
+            borrowedRepository.deleteById(book_id);
+
+            Library library = new Library();
+            updateLibraryafterReturn(library, copies);
         }
-        else{
-            new Exception("The book is not borrowed by anyone");
-        }
-
-        Library library = new Library();
-        updateLibraryafterReturn(library, copies);
-
-
     }
 }
