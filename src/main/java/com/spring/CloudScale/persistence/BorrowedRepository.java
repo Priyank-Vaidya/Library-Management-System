@@ -8,9 +8,15 @@ import java.util.Optional;
 
 
 public interface BorrowedRepository extends JpaRepository<Borrowed, Long> {
-    List<Borrowed> findAllByUserid(Long userid);
 
-    Optional<Borrowed> findById(Long bookid);
+//    List<Borrowed> save ();
+    List<Borrowed> findAllByUserid(Long user_id);
+
+    Optional<Borrowed> findById(Long book_id);
     List<Borrowed> findAllByUserIdAndBookId(Long cust_id, Long book_id);
+
+    Optional<Borrowed> deleteAll(List<Borrowed> borrowedList);
+
+    Optional<Borrowed> deleteById(long book_id);
 
 }

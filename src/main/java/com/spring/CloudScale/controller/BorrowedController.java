@@ -32,11 +32,8 @@ public class BorrowedController {
         List<Borrowed>  borrowedList = borrowedRepository.findAllByUserid(user_id);
 
         //Creating the Updation of the
-        borrowedCreationDTO.setUserid(user_id);
         borrowedCreationDTO.setBookid(book_id);
         borrowedCreationDTO.setCopies(copies);
-
-        borrowedRepository.save(user);
 
 
         Library library = new Library();
