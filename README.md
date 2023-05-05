@@ -18,11 +18,10 @@ The Following Application is build upon **Maven Dependent Spring-Boot Microservi
 
 
 ```http
-  curl --location --request POST 'http://localhost:8080/api/v1/book' \
+  curl --location --request POST 'http://localhost:8080/api/v1/library' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "title": "The Alchemist",
-    "author": "Paulo Coelho",
+    "book_name": "The Alchemist",
     "borrowed": false,
     "copies": 10
 }'
@@ -35,7 +34,7 @@ The Following Application is build upon **Maven Dependent Spring-Boot Microservi
 | `Content-Type` | `application/json` | **Required**: For Following |
 
 ```http
- curl --location --request GET 'http://localhost:8080/api/v1/book'
+ curl --location --request GET 'http://localhost:8080/api/v1/library'
 ```
 
 
@@ -49,7 +48,7 @@ The Following Application is build upon **Maven Dependent Spring-Boot Microservi
 
 
 ```http
-  curl --location --request POST 'http://localhost:8080/api/v1/{custid}/borrow' \
+  curl --location --request POST 'http://localhost:8080/api/v1/{user_id}/borrow' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "bookid": 1,
@@ -60,13 +59,14 @@ The Following Application is build upon **Maven Dependent Spring-Boot Microservi
 #### POST Returning the Book
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `custid` | `long` | **Required** |
-| `bookid` | `long` | **Required** |
+| `user_id` | `long` | **Required** |
+| `book_id` | `long` | **Required** |
+| `copies` | `long` | **Required** |
 
 
 
 ```http
- curl --location --request POST 'http://localhost:8080/api/v1/{custid}/return?bookid={bookid}'
+ curl --location --request POST 'http://localhost:8080/api/v1/{user_id}/return?bookid={bookid}'
 
 ```
 
@@ -77,7 +77,7 @@ The Following Application is build upon **Maven Dependent Spring-Boot Microservi
 
 ### For More reference on Implementation visit the below Link
 ---
-`
+
 [Documentation](https://docs.google.com/document/d/16fLI9HOpq6BfB_MOnTZmmdWb5PVRMUsixkAdtloSt6E/edit?usp=sharing)
 
 ## 🔗 Links
