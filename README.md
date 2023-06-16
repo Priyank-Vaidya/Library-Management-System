@@ -1,5 +1,5 @@
 
-# CloudScale Library API
+# Library API
 
 The following Documentation contains the scrips for Running the CloudScale Library Management System. This Project is the part of CloudScale Interview Assignment.
 
