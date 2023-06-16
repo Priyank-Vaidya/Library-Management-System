@@ -85,3 +85,7 @@ The Following Application is build upon **Maven Dependent Spring-Boot Microservi
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/priyank-vaidya/)
 [![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/priyank_vaidya)
 
+## Please find the microarchitectured Data-Flow diagram
+
+![Technology Roadmap](https://github.com/Priyank-Vaidya/Library-Management-System/assets/96229416/86c7962d-91ae-4f51-83ce-dde418040e4c)
+
