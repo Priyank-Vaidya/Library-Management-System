@@ -1,9 +1,9 @@
 
 # Library API
 
-The following Documentation contains the scrips for Running the CloudScale Library Management System. This Project is the part of CloudScale Interview Assignment.
+The following Documentation contains the scrips for Running the Library Management System.
 
-The Following Application is build upon **Maven Dependent Spring-Boot Microservice Architechtured Principles**.
+The Following Application is built upon **Maven Dependent Spring-Boot Microservice Architecture Principles**.
 
 
 
